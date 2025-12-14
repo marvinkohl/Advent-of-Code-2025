@@ -3,7 +3,7 @@
 %:- use_module(library(pio)).
 
 main():-
-    open('day1_input.txt', read, Stream),
+    open('day01_input.txt', read, Stream),
     read_lines(Stream, Rot),
     !,
     close(Stream),
