@@ -34,3 +34,24 @@ invalid_id(Number):-
     sub_string(Number, Half, Half, 0, X).
 
 valid_id(X):- \+ invalid_id(X).
+
+%% invalid_ids
+invalid_ids(Range, Result):-
+    invalid_ids(Range, [], Result).
+
+invalid_ids(range(X, X), Acc, Result):-
+    valid_id(X),
+    reverse(Acc, Result).
+invalid_ids(range(X, X), Acc, Result):-
+    invalid_id(X),
+    reverse([X|Acc], Result).
+invalid_ids(range(X, Y), Acc, Result):-
+    X =\= Y,
+    valid_id(X),
+    Z is X + 1,
+    invalid_ids(range(Z, Y), Acc, Result).
+invalid_ids(range(X, Y), Acc, Result):-
+    X =\= Y,
+    invalid_id(X),
+    Z is X + 1,
+    invalid_ids(range(Z, Y), [X|Acc], Result).
