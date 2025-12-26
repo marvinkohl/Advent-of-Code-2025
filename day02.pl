@@ -55,3 +55,12 @@ invalid_ids(range(X, Y), Acc, Result):-
     invalid_id(X),
     Z is X + 1,
     invalid_ids(range(Z, Y), [X|Acc], Result).
+
+%% added_up_ids
+added_up_ids(Input, Result):-
+    added_up_ids(Input, 0, Result).
+
+added_up_ids([], Result, Result).
+added_up_ids([X|Xs], Acc, Result):-
+    Y is Acc + X,
+    added_up_ids(Xs, Y, Result).
