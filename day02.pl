@@ -1,5 +1,9 @@
 %% -*- mode: prolog; -*-
 
+main(Result):-
+    valid_program,
+    added_up_ids_in_file("day02_input.txt", Result).
+
 valid_program:-
     invalid_id('55'),
     invalid_id('6464'),
@@ -16,6 +20,12 @@ valid_program:-
     invalid_ids(range(38593856,38593862), [38593859]),
     added_up_ids([11,22,99,1010,1188511885,222222,446446,38593859], 1227775554),
     added_up_ids_in_file("day02_test_input.txt", 1227775554).
+
+added_up_ids_in_file(File, Sum):-
+    file_ranges(File, Ranges),
+    maplist(invalid_ids, Ranges, InvalidIdsLists),
+    append(InvalidIdsLists, InvalidIds),
+    added_up_ids(InvalidIds, Sum).
 
 %% Reading Files
 %%
