@@ -17,6 +17,36 @@ valid_program:-
     added_up_ids([11,22,99,1010,1188511885,222222,446446,38593859], 1227775554),
     added_up_ids_in_file("day02_test_input.txt", 1227775554).
 
+%% Reading Files
+%%
+file_ranges(File, Ranges):-
+    open(File, read, Stream),
+    stream_ranges(Stream, Ranges),
+    !,
+    close(Stream).
+
+stream_ranges(Stream, []):- at_end_of_stream(Stream).
+stream_ranges(Stream, Ranges):-
+    \+ at_end_of_stream(Stream),
+    read_line_to_codes(Stream, Codes),
+    codes_ranges(Codes, CodesRanges),
+    stream_ranges(Stream, RestRanges),
+    append(CodesRanges, RestRanges, Ranges).
+
+codes_ranges([], []).
+codes_ranges(Codes, [range(N1, N2)|RestRanges]):-
+    char_code('-', SepCode),
+    char_code(',', Sep2Code),
+    append([N1Codes, [SepCode], N2Codes, [Sep2Code], RestCodes], Codes),
+    number_codes(N1, N1Codes),
+    number_codes(N2, N2Codes),
+    codes_ranges(RestCodes, RestRanges).
+codes_ranges(Codes, [range(N1, N2)]):-
+    char_code('-', SepCode),
+    append([N1Codes, [SepCode], N2Codes], Codes),
+    number_codes(N1, N1Codes),
+    number_codes(N2, N2Codes).
+
 invalid_id(Number):-
     integer(Number),
     number_string(Number, String),
