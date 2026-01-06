@@ -2,6 +2,7 @@
 
 main(Result):-
     valid_program,
+    writeln("Program is valid"), !,
     added_up_ids_in_file("day02_input.txt", Result).
 
 valid_program:-
@@ -14,6 +15,7 @@ valid_program:-
     invalid_id('1212121212'),
     invalid_id('1111111'),
     valid_id('101'),
+    writeln("invalid_id/1 is valid"), !,
     invalid_ids(range(11,22), [11, 22]),
     invalid_ids(range(95,115), [99, 111]),
     invalid_ids(range(998,1012), [999, 1010]),
@@ -25,8 +27,11 @@ valid_program:-
     invalid_ids(range(565653, 565659), [565656]),
     invalid_ids(range(824824821,824824827), [824824824]),
     invalid_ids(range(2121212118,2121212124), [2121212121]),
-    added_up_ids([11,22,99,1010,1188511885,222222,446446,38593859], 4174379265),
-    added_up_ids_in_file("day02_test_input.txt", 4174379265).
+    writeln("invalid_ids/2 is valid"), !,
+    added_up_ids([11,22,99,111,999,1010,1188511885,222222,446446,38593859,565656,824824824,2121212121], 4174379265),
+    writeln("added_up_ids/2 is valid"), !,
+    added_up_ids_in_file("day02_test_input.txt", 4174379265),
+    writeln("added_up_ids_in_file/2 is valid"), !.
 
 added_up_ids_in_file(File, Sum):-
     file_ranges(File, Ranges),
@@ -74,11 +79,19 @@ invalid_id(Atom):-
     invalid_id(String).
 invalid_id(Number):-
     string(Number),
-    string_length(Number, Len),
-    Len mod 2 =:= 0,
-    Half is Len / 2,
-    sub_string(Number, 0, Half, Half, X),
-    sub_string(Number, Half, Half, 0, X).
+    sub_string(Number, 0, Len, RestLen, X),
+    Len > 0,
+    sub_string(Number, Len, RestLen, 0, RestString),
+    repeated_string(X, RestString).
+
+%% repeated_string(SubString, String)
+repeated_string(X, X).
+repeated_string(X, Xs):-
+    sub_string(Xs, 0, _, 0, X).
+repeated_string(X, Xs):-
+    sub_string(Xs, 0, Len, RestLen, X),
+    sub_string(Xs, Len, RestLen, 0, RestString),
+    repeated_string(X, RestString).
 
 valid_id(X):- \+ invalid_id(X).
 
