@@ -12,3 +12,14 @@ valid_program:-
     writeln("maximum_bank_joltage/2 is valid"), !,
     total_file_output_joltage("day03_text_input.txt", 357),
     writeln("total_file_output_joltage/2 is valid"), !.
+
+maximum_bank_joltage(Bank, Joltage):-
+    bank_joltage(Bank, Joltage),
+    \+ (bank_joltage(Bank, X), X > Joltage).
+
+bank_joltage(Bank, Joltage):-
+    sub_string(Bank, Pos1, 1, _, C1),
+    sub_string(Bank, Pos2, 1, _, C2),
+    Pos2 > Pos1,
+    string_concat(C1, C2, JoltageAsString),
+    number_string(Joltage, JoltageAsString).
