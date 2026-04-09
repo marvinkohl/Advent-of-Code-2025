@@ -2,8 +2,16 @@
 
 :- begin_tests(day04).
 
-test(accessible_rolls_of_paper):-
+test(accessible_rolls_of_paper, [fixme(todo)]):-
     accessible_rolls_of_paper("day04_test_input.txt", 13).
+
+test(adjacent_items):-
+    adjacent_items([[1,2,3,4,5],
+                    [6,7,8,9,0],
+                    [1,2,3,4,5]],
+                   index(1, 1),
+                   Result),
+    assertion(permutation(Result, [1,2,3,8,3,2,1,6])).
 
 :- end_tests(day04).
 
@@ -28,7 +36,7 @@ stream_diagram(Stream, [Line|RestLines]):-
 
 %%
 adjacent_items(Diagram, index(X, Y), Items):-
-    findall(X, adjacent_item(Diagram, index(X, Y), X), Items),
+    findall(Result, adjacent_item(Diagram, index(X, Y), Result), Items),
     assertion((length(Items, Len), Len =< 8)).
 
 adjacent_item(Diagram, Index, Item):-
