@@ -24,6 +24,16 @@ test(adjacent_items_of_corners_are_found):-
 test(roll_of_paper):- assertion(roll_of_paper(@)).
 test(roll_of_paper_fails):- assertion(\+ roll_of_paper(.)).
 
+test(diagram_index_gives_all_indexes):-
+    Diagram = [[1,2,3,4,5],
+               [6,7,8,9,0],
+               [1,2,3,4,5]],
+    findall(X, diagram_index(Diagram, X), Results),
+    assertion(member(index(0,0), Results)),
+    assertion(member(index(2,4), Results)),
+    length(Results, Count),
+    assertion(Count =:= 15).
+
 test(accessible_roll_of_paper):-
     accessible_roll_of_paper(
         [[@,@,.,@,.],
@@ -51,6 +61,16 @@ stream_diagram(Stream, [Line|RestLines]):-
     read_line_to_codes(Stream, Codes), !,
     maplist(char_code, Line, Codes),
     stream_diagram(Stream, RestLines).
+
+%% Get the indexes of the diagram
+diagram_index(Diagram, index(X, Y)):-
+    length(Diagram, XLen),
+    nth0(0, Diagram, Row),
+    length(Row, YLen),
+    XUpper is XLen - 1,
+    YUpper is YLen - 1,
+    between(0, XUpper, X),
+    between(0, YUpper, Y).
 
 %%
 adjacent_items(Diagram, index(X, Y), Items):-
