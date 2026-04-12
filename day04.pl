@@ -24,6 +24,13 @@ test(adjacent_items_of_corners_are_found):-
 test(roll_of_paper):- assertion(roll_of_paper(@)).
 test(roll_of_paper_fails):- assertion(\+ roll_of_paper(.)).
 
+test(accessible_roll_of_paper):-
+    accessible_roll_of_paper(
+        [[@,@,.,@,.],
+         [.,@,@,.,@],
+         [.,.,.,@,@]],
+        index(0,3)).
+
 :- end_tests(day04).
 
 main(X):-
@@ -69,3 +76,12 @@ indexed_value(Diagram, index(X, Y), Item):-
 
 %% Identify roll of papers
 roll_of_paper(@).
+
+%% Check a accessible roll of paper
+accessible_roll_of_paper(Diagram, Index):-
+    indexed_value(Diagram, Index, Item),
+    roll_of_paper(Item),
+    adjacent_items(Diagram, Index, Adjacents),
+    include(roll_of_paper, Adjacents, AdjacentRolls),
+    length(AdjacentRolls, Count),
+    Count < 4.
