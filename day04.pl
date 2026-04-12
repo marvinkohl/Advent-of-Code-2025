@@ -21,6 +21,9 @@ test(adjacent_items_of_corners_are_found):-
                    Result),
     assertion(permutation(Result, [4,9,0])).
 
+test(roll_of_paper):- assertion(roll_of_paper(@)).
+test(roll_of_paper_fails):- assertion(\+ roll_of_paper(.)).
+
 :- end_tests(day04).
 
 main(X):-
@@ -63,3 +66,6 @@ adjacent_index(index(X, Y), index(X2, Y2)):- X2 is X + 1, Y2 is Y + 1.
 indexed_value(Diagram, index(X, Y), Item):-
     nth0(X, Diagram, Row),
     nth0(Y, Row, Item).
+
+%% Identify roll of papers
+roll_of_paper(@).
