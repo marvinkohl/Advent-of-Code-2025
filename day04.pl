@@ -51,6 +51,13 @@ test(accessible_roll_of_papers_will_be_found):-
     assertion(member(index(0, 0), Results)),
     assertion(\+ member(index(1,2), Results)).
 
+test(count_accessible_roll_of_papers):-
+    Diagram = [[@,.,@,@],
+               [@,@,.,@],
+               [@,@,@,@]],
+    accessible_roll_of_paper_count(Diagram, Result),
+    assertion(Result =:= 5).
+
 :- end_tests(day04).
 
 main(X):-
@@ -113,3 +120,8 @@ accessible_roll_of_paper(Diagram, Index):-
     include(roll_of_paper, Adjacents, AdjacentRolls),
     length(AdjacentRolls, Count),
     Count < 4.
+
+%% Count the accessible roll of papers
+accessible_roll_of_paper_count(Diagram, Count):-
+    findall(X, accessible_roll_of_paper(Diagram, X), Indexes),
+    length(Indexes, Count).
