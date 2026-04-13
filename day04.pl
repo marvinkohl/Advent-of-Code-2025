@@ -2,8 +2,9 @@
 
 :- begin_tests(day04).
 
-test(accessible_rolls_of_paper, [fixme(todo)]):-
-    accessible_rolls_of_paper("day04_test_input.txt", 13).
+test(file_accessible_roll_of_paper):-
+    file_accessible_roll_of_paper("day04_test_input.txt", Result),
+    assertion(Result =:= 13).
 
 test(adjacent_items):-
     adjacent_items([[1,2,3,4,5],
@@ -61,7 +62,11 @@ test(count_accessible_roll_of_papers):-
 :- end_tests(day04).
 
 main(X):-
-    accessible_rolls_of_paper("day04_input.txt", X).
+    file_accessible_roll_of_paper("day04_input.txt", X).
+
+file_accessible_roll_of_paper(File, Count):-
+    file_diagram(File, Diagram),
+    accessible_roll_of_paper_count(Diagram, Count).
 
 %% Reading the Diagram from a File as list of list of chars.
 file_diagram(File, Diagram):-
