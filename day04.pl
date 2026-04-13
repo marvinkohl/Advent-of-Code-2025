@@ -41,12 +41,20 @@ test(accessible_roll_of_paper):-
          [.,.,.,@,@]],
         index(0,3)).
 
+test(accessible_roll_of_papers_will_be_found):-
+    Diagram = [[@,@,.,@,.],
+               [.,@,@,.,@],
+               [.,.,.,@,@]],
+    findall(X, accessible_roll_of_paper(Diagram, X), Results),
+    length(Results, Count),
+    assertion(Count =:= 7),
+    assertion(member(index(0, 0), Results)),
+    assertion(\+ member(index(1,2), Results)).
+
 :- end_tests(day04).
 
 main(X):-
     accessible_rolls_of_paper("day04_input.txt", X).
-
-accessible_rolls_of_paper(_, _):- fail.
 
 %% Reading the Diagram from a File as list of list of chars.
 file_diagram(File, Diagram):-
