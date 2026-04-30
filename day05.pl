@@ -27,3 +27,17 @@ string_range(String, range(X, Y)):-
     sub_string(String, _, YLen, 0, YStr),
     number_string(X, XStr),
     number_string(Y, YStr).
+
+%%! range_members(+Range, -Members:list)
+range_members(range(X, X), [X]):- !.
+range_members(range(X1, Y), [X1|MRest]):-
+    X1 < Y,
+    succ(X1, X2),
+    range_members(range(X2, Y), MRest).
+
+%%! range_list_members(+RangeList:list, -Members:list)
+range_list_members([], []).
+range_list_members([R|Rs], Members):-
+    range_members(R, M),
+    range_list_members(Rs, Ms),
+    ord_union(M, Ms, Members).
