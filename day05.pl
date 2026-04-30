@@ -41,3 +41,13 @@ range_list_members([R|Rs], Members):-
     range_members(R, M),
     range_list_members(Rs, Ms),
     ord_union(M, Ms, Members).
+
+%%! available_ingredient_fresh_count(+File:string, -FreshCount:int)
+available_ingredient_fresh_count(File, Count):-
+    file_ingredients(File, Fresh, Available),
+    debug(day05, "File read", []),
+    range_list_members(Fresh, FreshMembers),
+    debug(day05, "Calculated fresh ingredients", []),
+    intersection(FreshMembers, Available, FreshAvailable),
+    debug(day05, "Calculated fresh and available ingredients", []),
+    length(FreshAvailable, Count).

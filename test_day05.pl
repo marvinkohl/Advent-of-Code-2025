@@ -24,4 +24,8 @@ test(range_list_members_doesnt_create_duplicate_members):-
     range_list_members([range(11,15), range(13,16)], Result),
     assertion(Result == [11,12,13,14,15,16]).
 
+test(available_ingredient_fresh_count):-
+    available_ingredient_fresh_count("day05_test_input.txt", Result),
+    assertion(Result == 3).
+
 :- end_tests(day05).
