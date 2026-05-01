@@ -42,6 +42,38 @@ range_list_members([R|Rs], Members):-
     range_list_members(Rs, Ms),
     ord_union(M, Ms, Members).
 
+%%! range_union(+Range1, +Range2, -Union)
+range_union([], [], []).
+range_union(X, [], X).
+range_union([], X, X).
+range_union(range(Xa,Xb), range(Ya,Yb), range(Min,Max)):-
+    range_intersection(range(Xa, Xb), range(Ya,Yb)),
+    !,
+    Min is min(Xa,Ya),
+    Max is max(Xb,Yb).
+range_union(range(Xa,Xb), range(Ya,Yb), range(Min,Max)):-
+    range_connected(range(Xa, Xb), range(Ya,Yb)),
+    !,
+    Min is min(Xa,Ya),
+    Max is max(Xb,Yb).
+range_union(X, Y, [X,Y]):-
+    functor(X, range, 2),
+    functor(Y, range, 2).
+
+range_intersection(range(Xa,Xb), range(Ya,Yb)):-
+    Xa =< Yb, Ya =< Xb.
+
+range_connected(range(_,Xb), range(Ya,_)):- succ(Xb,Ya).
+range_connected(range(Xa,_), range(_,Yb)):- succ(Yb,Xa).
+
+%%! range_list_merged(+Unmerged, -Merged)
+range_list_merged(X, X).
+range_list_merged(Unmerged, Merged):-
+    foldl(range_union, Unmerged, [], Merged).
+
+range_list_merged_(Unmerged, Acc, Merged):-
+    foldl(range_union, Unmerged, Acc, Merged).
+
 %%! available_ingredient_fresh_count(+File:string, -FreshCount:int)
 available_ingredient_fresh_count(File, Count):-
     file_ingredients(File, Fresh, Available),

@@ -28,4 +28,22 @@ test(available_ingredient_fresh_count):-
     available_ingredient_fresh_count("day05_test_input.txt", Result),
     assertion(Result == 3).
 
+test(range_union, true(permutation(Result, [range(4,6), range(8,9)]))):-
+    range_union(range(4,6), range(8,9), Result).
+
+test(range_union, true(Result = range(4,8))):-
+    range_union(range(4,7), range(6,8), Result).
+
+test(range_union, true(Result = range(4,8))):-
+    range_union(range(4,6), range(7,8), Result).
+
+test(range_list_merged):-
+    Input = [range(12,14), range(9,10), range(13, 15)],
+    range_list_merged(Input, Result),
+    %% Assert
+    range_list_members(Input, X1),
+    range_list_members(Result, X2),
+    assertion(permutation(X1, X2)),
+    assertion(permutation(Result, [range(12,15), range(9,10)])).
+
 :- end_tests(day05).
