@@ -83,3 +83,38 @@ available_ingredient_fresh_count(File, Count):-
     intersection(FreshMembers, Available, FreshAvailable),
     debug(day05, "Calculated fresh and available ingredients", []),
     length(FreshAvailable, Count).
+
+%% Predicate to check variable as ranges
+%%
+%%! is_single_range(+Term)
+is_single_range(range(X,Y)):-
+    integer(X),
+    integer(Y).
+
+%%! is_range_list(+Term)
+is_range_list(List):-
+    maplist(is_range, List).
+
+%%! is_range(+Term)
+is_range(X):- is_single_range(X); is_range_list(X).
+
+
+%% Merge single ranges
+%%
+%%! range_intersection(+Range, +Range, -Intersection)
+range_intersection(range(Xa,Xb), range(Ya,Yb), range(Min,Max)):-
+    Xa =< Yb,
+    Ya =< Xb,
+    Min is min(Xa,Ya),
+    Max is max(Xb,Yb).
+
+%%! range_connected(+Range, +Range, -ConnectedRange)
+range_connected(range(Min,Xb), range(Ya,Max), range(Min,Max)):-
+    succ(Xb,Ya).
+range_connected(range(Xa,Max), range(Min,Yb), range(Min,Max)):-
+    succ(Yb,Xa).
+
+%%! range_merged(+Range, +Range, -MergedRange)
+range_merged(X,Y,Z):-
+    range_intersection(X,Y,Z);
+    range_connected(X,Y,Z).
