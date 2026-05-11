@@ -42,29 +42,21 @@ range_list_members([R|Rs], Members):-
     range_list_members(Rs, Ms),
     ord_union(M, Ms, Members).
 
-%%! range_union(+Range1, +Range2, -Union)
+%%  Rules to create unions of multiple ranges
+%
+%!  range_union(+Range1:range, +Range2:range, -Union:range)
 range_union([], [], []).
-range_union(X, [], X).
-range_union([], X, X).
-range_union(range(Xa,Xb), range(Ya,Yb), range(Min,Max)):-
-    range_intersection(range(Xa, Xb), range(Ya,Yb)),
-    !,
-    Min is min(Xa,Ya),
-    Max is max(Xb,Yb).
-range_union(range(Xa,Xb), range(Ya,Yb), range(Min,Max)):-
-    range_connected(range(Xa, Xb), range(Ya,Yb)),
-    !,
-    Min is min(Xa,Ya),
-    Max is max(Xb,Yb).
+range_union(X, [], X):- is_range(X), !.
+range_union([], X, X):- is_range(X), !.
+range_union(X,Y,Z):-
+    is_single_range(X),
+    is_single_range(Y),
+    range_merged(X,Y,Z),
+    !.
 range_union(X, Y, [X,Y]):-
-    functor(X, range, 2),
-    functor(Y, range, 2).
-
-range_intersection(range(Xa,Xb), range(Ya,Yb)):-
-    Xa =< Yb, Ya =< Xb.
-
-range_connected(range(_,Xb), range(Ya,_)):- succ(Xb,Ya).
-range_connected(range(Xa,_), range(_,Yb)):- succ(Yb,Xa).
+    is_single_range(X),
+    is_single_range(Y),
+    !.
 
 %%! range_list_merged(+Unmerged, -Merged)
 range_list_merged(X, X).
