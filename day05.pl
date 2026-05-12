@@ -42,6 +42,21 @@ range_list_members([R|Rs], Members):-
     range_list_members(Rs, Ms),
     ord_union(M, Ms, Members).
 
+%!  range_member(+Range:range, +Member:integer).
+range_member(range(X,Y), M):-
+    integer(X),
+    integer(Y),
+    integer(M),
+    debug(day05, "~d in range(~d,~d)?", [M, X, Y]),
+    X =< M,
+    M =< Y.
+range_member([R1|_], M):-
+    is_single_range(R1),
+    range_member(R1, M),
+    !.
+range_member([_|Rs], M):-
+    range_member(Rs, M).
+
 %%  Rules to create unions of multiple ranges
 %
 %!  range_union(+Range1:range, +Range2:range, -Union:range)
@@ -77,11 +92,11 @@ range_list_merged_([X1|Xs], [X1|Y]):-
 
 %%! available_ingredient_fresh_count(+File:string, -FreshCount:int)
 available_ingredient_fresh_count(File, Count):-
-    file_ingredients(File, Fresh, Available),
+    file_ingredients(File, Fresh1, Available),
     debug(day05, "File read", []),
-    range_list_members(Fresh, FreshMembers),
-    debug(day05, "Calculated fresh ingredients", []),
-    intersection(FreshMembers, Available, FreshAvailable),
+    range_list_merged(Fresh1, Fresh),
+    debug(day05, "Calculated fresh ranges", []),
+    include([X]>>range_member(Fresh, X), Available, FreshAvailable),
     debug(day05, "Calculated fresh and available ingredients", []),
     length(FreshAvailable, Count).
 

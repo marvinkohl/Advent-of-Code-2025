@@ -46,4 +46,7 @@ test(range_list_merged):-
     assertion(permutation(X1, X2)),
     assertion(permutation(Result, [range(12,15), range(9,10)])).
 
+test(range_member):-
+    range_member([range(8,10), range(15,73)], 9).
+
 :- end_tests(day05).
