@@ -58,13 +58,22 @@ range_union(X, Y, [X,Y]):-
     is_single_range(Y),
     !.
 
-%%! range_list_merged(+Unmerged, -Merged)
-range_list_merged(X, X).
-range_list_merged(Unmerged, Merged):-
-    foldl(range_union, Unmerged, [], Merged).
+%!  range_list_merged(+Unmerged:list, -Merged:range)
+%
+%   True if Merged a best merged range of all ranges in the Unmerged list
+range_list_merged(U, M):-
+    sort(U, Sorted),
+    range_list_merged_(Sorted, M).
 
-range_list_merged_(Unmerged, Acc, Merged):-
-    foldl(range_union, Unmerged, Acc, Merged).
+range_list_merged_([], []).
+range_list_merged_([X], [X]).
+range_list_merged_([X1,X2|Xs], Z):-
+    range_merged(X1,X2,Y),
+    !,
+    range_list_merged_([Y|Xs], Z).
+range_list_merged_([X1|Xs], [X1|Y]):-
+    range_list_merged_(Xs, Y),
+    !.
 
 %%! available_ingredient_fresh_count(+File:string, -FreshCount:int)
 available_ingredient_fresh_count(File, Count):-
