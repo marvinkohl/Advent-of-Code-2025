@@ -49,4 +49,9 @@ test(range_list_merged):-
 test(range_member):-
     range_member([range(8,10), range(15,73)], 9).
 
+test(range_member, all(Result == [9, 10, 11])):-
+    range_member(range(9, 11), Result).
+test(range_member, all(Result == [2, 3, 4, 5, 6, 10, 11, 12, 13])):-
+    range_member([range(2, 6), range(10, 13)], Result).
+
 :- end_tests(day05).

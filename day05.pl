@@ -1,5 +1,7 @@
 %% -*- mode: prolog; -*-
 
+:- use_module(library(clpfd)).
+
 file_ingredients(File, Fresh, Available):-
     open(File, read, Stream),
     stream_ingredients(Stream, Fresh, Available),
@@ -42,7 +44,20 @@ range_list_members([R|Rs], Members):-
     range_list_members(Rs, Ms),
     ord_union(M, Ms, Members).
 
-%!  range_member(+Range:range, +Member:integer).
+%!  range_member(+Range:range, ?Member:integer).
+range_member(Range, Member):-
+    is_single_range(Range),
+    var(Member),
+    !,
+    range(X, Y) = Range,
+    Member in X..Y,
+    indomain(Member).
+range_member(Range, Member):-
+    is_range_list(Range),
+    var(Member),
+    !,
+    [R1|Rs] = Range,
+    (range_member(R1, Member); range_member(Rs, Member)).
 range_member(range(X,Y), M):-
     integer(X),
     integer(Y),
