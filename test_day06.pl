@@ -10,4 +10,18 @@ test(problem_result, Result == 33210):-
 test(problem_result, Result == 490):-
     problem_result(problem([328, 64, 98], '+'), Result).
 
+test(file_problems,
+     Result == [problem([123, 45, 6], '*'),
+                problem([328, 64, 98], '+'),
+                problem([51, 387, 215], '*'),
+                problem([64, 23, 314], '+')
+               ]
+    ) :-
+    file_problems("day06_test_input.txt", Result).
+
+test(line_numbers,
+     Result == [24, 8, 51, 3]
+    ) :-
+    line_numbers(" 24  8 51  3", Result).
+
 :- end_tests(day06).
