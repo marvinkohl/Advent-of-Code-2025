@@ -13,6 +13,11 @@
 %
 %  True if GrandTotal is the sum of all problem results in the File.
 
+file_grand_total(File, GrandTotal):-
+    file_problems(File, Problems),
+    maplist(problem_result, Problems, Results),
+    foldl(plus, Results, 0, GrandTotal).
+
 %% file_problems(+File:string, -Problems:list) is semidet
 %
 %  True if Problems are a list of all problems in the File.
@@ -82,8 +87,10 @@ line_numbers_normalized(Line, [Number]):-
 %  True if Result is the calculated number of the Problem.
 
 problem_result(problem(Numbers, '*'), Result):-
+    !,
     foldl(product, Numbers, 1, Result).
 problem_result(problem(Numbers, '+'), Result):-
+    !,
     foldl(plus, Numbers, 0, Result).
 
 product(N1, N2, Product):-

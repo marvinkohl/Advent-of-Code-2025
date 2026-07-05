@@ -24,4 +24,9 @@ test(line_numbers,
     ) :-
     line_numbers(" 24  8 51  3", Result).
 
+test(file_grand_total,
+     Result == 4277556
+    ):-
+    file_grand_total("day06_test_input.txt", Result).
+
 :- end_tests(day06).
